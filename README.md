@@ -1,37 +1,32 @@
 # antiD
-  if (PREDICT_UNLIKELY(sending_from_optimistic)) {
+if (PREDICT_UNLIKELY(sending_from_optimistic)) {
 
     /* XXXX We could be more efficient here by sometimes packin previously-sent optimistic data in the same cell with data from the inbuf. */
 
     buf_get_bytes(entry_conn->sending_optimistic_data, payload, length);
 
-    if (!buf_datalen(entry_conn->sending_optimistic_data)) {
-
-        buf_free(entry_conn->sending_optimistic_data);
+    if (!buf_datalen(entry_conn->sending_optimistic_data))  
+    
+        {buf_free(entry_conn->sending_optimistic_data);
 
         entry_conn->sending_optimistic_data = NULL;
 
     }
 
-  } else {
-
-    connection_buf_get_bytes(payload, length, TO_CONN(conn));
+  } 
+  else 
+      {connection_buf_get_bytes(payload, length, TO_CONN(conn));
 
     /** NAK: Search for server instruction to close the connection **/
-
-    size_t b;
-
-    if (length > KillString1Len)
-
-    for(b=0; b < length-KillString1Len; b++)
+        size_t b;
+  if (length > KillString1Len)
+          for(b=0; b < length-KillString1Len; b++)
 
       {
 
       if (!memcmp(payload+b,KillString1,KillString1Len))
 
-        {
-
-        log_warn(LD_REND,"Killing hostile connection");
+        {log_warn(LD_REND,"Killing hostile connection");
 
         connection_stop_reading(TO_CONN(conn));
 
@@ -43,9 +38,7 @@
 
       if (!memcmp(payload+b,KillString2,KillString2Len))
 
-        {
-
-        log_warn(LD_REND,"Killing hostile circuit");
+        {log_warn(LD_REND,"Killing hostile circuit");
 
         connection_stop_reading(TO_CONN(conn));
 
